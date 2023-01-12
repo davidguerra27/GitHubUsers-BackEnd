@@ -78,7 +78,7 @@ async function tableSetup() {
     OWNER to postgres;`);
     console.log("Table has been successfully created.");
   } catch (error) {
-    console.error(error+"erro!!!!");
+    console.error(error);
   }
 }
 
@@ -126,7 +126,7 @@ async function displayUsers() {
     const users = await dbAccess.any(`SELECT * FROM github_accounts`);
     console.log(users);
   } catch (error) {
-    console.error(error+"No User has been fetched. Table is empty.");
+    console.error(error);
   }
 }
 //QUERYS THE DATABASE FOR ALL USERS THAT MACTH THE SEARCHED LOCATION
