@@ -1,0 +1,23 @@
+{
+  "name": "githubusers-backend",
+  "version": "1.0.0",
+  "description": "The goal was to develop a command-line application using NodeJS + TypeScript (or just Javascript/NodeJS) + PostgreSQL, whose goals are:",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidguerra27/GitHubUsers-BackEnd.git"
+  },
+  "author": "David Guerra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidguerra27/GitHubUsers-BackEnd/issues"
+  },
+  "homepage": "https://github.com/davidguerra27/GitHubUsers-BackEnd#readme",
+  "dependencies": {
+    "pg": "^8.8.0",
+    "pg-promise": "^11.0.2"
+  }
+}
