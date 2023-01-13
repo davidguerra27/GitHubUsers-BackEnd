@@ -1,31 +1,42 @@
+//BEFORE YOU RUN ANY COMMAND MAKE SURE YOU CHANGE YOUR CREDENTIALS IN THE .env FILE.
+//MAKE SURE YOU USE THE SAME CREDENTIALS YOU USED TO SETUP THE POSTGRE SERVER ON YOUR LOCAL MACHINE 
+
+
+require('dotenv').config();
 const { Pool } = require('pg');
 const pgp = require('pg-promise')();
+const values = pgp.helpers.values;
 
-//PROMISSE TO ACCESS THE SERVER AND CREATE DATABASE-----INPUT REQUIRED
-const dbCreate = pgp({
-  host: 'localhost',
-  port: 6600,
-  user: '<username>',//CHANGE HERE TO THE USERNAME YOU CHOSE WHEM LAUNCHING THE SERVER
-  password: '<password>'//CHANGE HERE TO THE PASSWORD YOU CHOSE WHEM LAUNCHING THE SERVER
-});
 
-//PROMISSE TO ACCESS THE DATABASE AND CREATE THE TABLE-----INPUT REQUIRED
-const dbAccess = pgp({
-  host: 'localhost',
-  port: 6600,
-  database: 'github_users',
-  user: '<username>',//CHANGE HERE TO THE USERNAME YOU CHOSE WHEM LAUNCHING THE SERVER
-  password: '<password>'//CHANGE HERE TO THE PASSWORD YOU CHOSE WHEM LAUNCHING THE SERVER
-});
-
-//POOL DATA USED TO CREATE NEW POOLS TO ACCESS THE DATABASE AND UPDATE THE TABLE-----INPUT REQUIRED
+//CREATE OBJECT CONNECTION USING ENVIROMENT VARIABLES
+const connection = {
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD
+};
+//CREATE PROMISE AND ESTABLISH CONNECTION WITH POSTGRE SERVER
+const db = pgp(connection);
+const dbCreate = db;
+////CREATE PROMISE AND ESTABLISH CONNECTION WITH POSTGRE DATABSE AFTER CREATION
+const dbAccess = withDatabase(process.env.DB_NAME);
+//POOL DATA USED TO CREATE NEW POOLS TO ACCESS THE DATABASE AND UPDATE THE TABLE
 const poolData = {
-  user: '<username>',//CHANGE HERE TO THE USERNAME YOU CHOSE WHEM LAUNCHING THE SERVER
-  host: 'localhost',
-  database: 'github_users',
-  password: '<password>',//CHANGE HERE TO THE PASSWORD YOU CHOSE WHEM LAUNCHING THE SERVER
-  port: 6600,
-}; 
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT
+};
+//ADD THE DATABASE NAME TO THE CONNECTION ONCE CREATED
+function withDatabase(name) {
+  Object.assign(connection,{database:name})
+
+  return pgp(
+      connection
+  );
+}
+
 
 //CREATES THE DATABASE
 async function databaseSetup() {
@@ -96,11 +107,20 @@ async function fetchAndStoreGitHubUser() {
     //CONVERTS IT BACK TO AN ARRAY TO BE STORED
     const languageArr = Array.from(languageSet);
     
-    console.log("Repositories found : "+repositories.length)
+   
     
     // FECTH THE USER DATA FROM THE GITHUB USERS API
     const userInfo = await fetch(`https://api.github.com/users/${finalArgs}`);
     const user = await userInfo.json();
+    //STORES ALL THE COMBINED DATA INTO AN OBJECT FOR EASY INSERT
+    const userData = {
+      user_id: user.id,
+      user_name: user.login,
+      location: user.location,
+      repositories: user.public_repos,
+      languages: languageArr 
+    }
+
     console.log("User found.")
 
     // CONNECTS TO THE DATABASE
@@ -108,8 +128,7 @@ async function fetchAndStoreGitHubUser() {
 
     // INSERTS THE DATA INTO THE TABLE
     const result = await pool.query(
-      'INSERT INTO github_accounts (user_id, user_name, location,repositories,languages) VALUES ($1, $2, $3, $4, $5)',
-      [user.id, user.login, user.location, user.public_repos, languageArr]
+      `INSERT INTO github_accounts VALUES ${values(userData)}`,
     );
     console.log('User stored successfully: '+result.rowCount + ' row(s) inserted.');
   

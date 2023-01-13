@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/davidguerra27/GitHubUsers-BackEnd#readme",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "pg": "^8.8.0",
     "pg-promise": "^11.0.2"
   }
