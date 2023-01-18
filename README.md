@@ -46,7 +46,7 @@ To use the application, run the following commands:
 ```
     2. Display Users already stored:
 ```bash
-    node index.js display
+    node app.js display
 ```
     3. Display Users from database by location:
 ```bash
