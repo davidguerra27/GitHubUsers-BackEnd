@@ -29,6 +29,7 @@ To install the application, after launching the server, follow these steps:
 ```bash
     npm install
 ```
+Before you can run the command to setup the database you need to go into the project folder, to the .env file and insert your server credentials.
 
     4. Setup the database:
 ```bash
