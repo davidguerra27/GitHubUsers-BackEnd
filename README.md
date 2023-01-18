@@ -29,6 +29,7 @@ To install the application, after launching the server, follow these steps:
 ```bash
     npm install
 ```
+
     4. Setup the database:
 ```bash
     node app.js dbsetup
