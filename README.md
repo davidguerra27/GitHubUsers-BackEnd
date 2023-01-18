@@ -31,18 +31,18 @@ To install the application, after launching the server, follow these steps:
 ```
     4. Setup the database:
 ```bash
-    node index.js dbsetup
+    node app.js dbsetup
 ```  
     5. Create the table: 
 ```bash
-    node index.js tbsetup
+    node app.js tbsetup
 ``` 
 ## Usage
 To use the application, run the following commands:
 
     1. Fetch User from GitHub API:
 ```bash
-    node index.js get <username>
+    node app.js get <username>
 ```
     2. Display Users already stored:
 ```bash
@@ -50,11 +50,11 @@ To use the application, run the following commands:
 ```
     3. Display Users from database by location:
 ```bash
-    node index.js location <location>
+    node app.js location <location>
 ```
     4. Display Users from database by language:
 ```bash
-    node index.js language <language> 
+    node app.js language <language> 
 ```
 
 
